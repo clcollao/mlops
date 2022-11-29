@@ -26,6 +26,12 @@ print(df.shape)
 normal = df[df['Class']==0].sample(frac=0.5, random_state=123).reset_index(drop=True)
 anormales = df[df['Class']==1]
 
-# Dimensiones dataset normal y anomales
+# Dimensiones dataset normal y anormales
 print(normal.shape)
 print(anormales.shape)
+
+# Generación de train, test y validación
+normal_train, normal_test = train_test_split(normal, test_size=0.2, random_state=123)
+anormales_train, anormales_test = train_test_split(anormales, test_size=0.2, random_state=123)
+normal_train, normal_validate = train_test_split(normal_train, test_size=0.2, random_state=123)
+anormales_train, anormales_validate = train_test_split(anormales_train, test_size=0.2, random_state=123)
