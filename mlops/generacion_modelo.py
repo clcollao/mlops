@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sklearn #
@@ -15,4 +16,16 @@ DATA = Path('/Users/claudiocollaobahamondes/Desktop/mlops/mlops/data')
 # Validación si existe la carpeta data
 DATA.exists()
 
+# Carga de los datos
 df = pd.read_csv(DATA/'creditcard.csv')
+
+#Dimensiones dataset original
+print(df.shape)
+
+# Creación de datasets con transacciones normales  y anormales
+normal = df[df['Class']==0].sample(frac=0.5, random_state=123).reset_index(drop=True)
+anormales = df[df['Class']==1]
+
+# Dimensiones dataset normal y anomales
+print(normal.shape)
+print(anormales.shape)
