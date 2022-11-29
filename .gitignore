@@ -1,0 +1,10 @@
+# Ambientes
+.venv
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Carpetas
+/data
+/tests
