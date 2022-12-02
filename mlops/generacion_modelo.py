@@ -70,3 +70,28 @@ x_train = scaler.transform(x_train)
 x_test = scaler.transform(x_test)
 x_validate = scaler.transform(x_validate)
 
+# Entrenamiento del Modelo
+sk_model = LogisticRegression(random_state=None,max_iter=400,solver='newton-cg').fit(x_train,y_train)
+
+
+# Evaluación del Modelo
+eval_acc = sk_model.score(x_test,y_test)
+
+pred = sk_model.predict(x_test)
+auc_score = roc_auc_score(y_test,pred)
+
+print(f'AUC Score: {auc_score:.3%}')
+print(f'Eval Accuracy: {eval_acc:.3%}')
+
+# Curva ROC
+roc_plot = plot_roc_curve(sk_model,x_test,y_test,name='Scikit-learn ROC Curve')
+plt.show()
+
+# Matriz de Confusión
+conf_matrix = confusion_matrix(y_test,pred)
+ax = sns.heatmap(conf_matrix,annot=True,fmt='g')
+ax.invert_xaxis()
+ax.invert_yaxis()
+plt.ylabel('Actual')
+plt.xlabel('Predicho')
+plt.show()
