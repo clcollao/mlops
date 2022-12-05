@@ -95,3 +95,9 @@ ax.invert_yaxis()
 plt.ylabel('Actual')
 plt.xlabel('Predicho')
 plt.show()
+
+# Validación del modelo
+peso_anomalias = [1,5,10,15] # Lista de pesos a iterar
+num_folds = 5  # Definir el número de fold
+k_fold = KFold(n_splits=num_folds,shuffle=True,random_state=123)
+
