@@ -99,5 +99,50 @@ plt.show()
 # Validación del modelo
 peso_anomalias = [1,5,10,15] # Lista de pesos a iterar
 num_folds = 5  # Definir el número de fold
-k_fold = KFold(n_splits=num_folds,shuffle=True,random_state=123)
+k_fold = KFold(n_splits=num_folds,shuffle=True,random_state=123) # Particiona los datos en diferentes folds
+
+logs = []
+for f in range(len(peso_anomalias)):
+    fold = 1
+    accuracies = []
+    auc_scores = []
+    for train, test in k_fold.split(x_validate,y_validate):
+        peso = peso_anomalias[f]
+        class_pesos = {
+            0:1,
+            1:peso
+        }
+        sk_model = LogisticRegression(
+            random_state=None,
+            max_iter=100,
+            solver='newton-cg',
+            class_weight=class_pesos).fit(x_validate[train],y_validate[train])
+        for h in range(40): print('-',end='')
+        print(f'\nfold {fold}\nPeso Anomalia:{peso}')
+
+        eval_acc = sk_model.score(x_validate[test],y_validate[test])
+        preds = sk_model.predict(x_validate[test])
+
+        try:
+            auc_score = roc_auc_score(y_validate[test],preds)
+        except:
+            auc_score = -1
+    
+        print('AUC: {}\neval_acc: {}'.format(auc_score,eval_acc))
+        accuracies.append(eval_acc)
+        auc_scores.append(auc_score)
+
+        log = [sk_model, x_validate[test],y_validate[test],preds]
+        logs.append(log)
+        fold = fold + 1
+    print('\nAverages: ')
+    print('Accuracy: ',np.mean(accuracies))
+    print('AUC: ',np.mean(auc_scores))
+    print('')
+    print('Best: ')
+    print('Accuracy: ',np.max(accuracies))
+    print('AUC: ',np.max(auc_scores))
+
+
+
 
